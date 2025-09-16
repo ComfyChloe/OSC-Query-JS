@@ -1,0 +1,24 @@
+{
+  "name": "comfychloe",
+  "version": "0.1.0",
+  "description": "A JavaScript project for OSC Query implementation",
+  "main": "Main.js",
+  "scripts": {
+    "start": "node Main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ComfyChloe",
+  "license": "MIT",
+  "dependencies": {
+    "oscquery": "^1.1.1"
+  },
+  "keywords": [
+    "osc",
+    "oscquery",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ComfyChloe/OSC-Query-JS"
+  }
+}
