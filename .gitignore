@@ -32,3 +32,4 @@ icons/
 .vscode
 package-lock.json
 dist*
+examples/*
