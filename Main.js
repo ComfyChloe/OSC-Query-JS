@@ -1,5 +1,6 @@
-const { OSCQueryServer, OSCQAccess, OSCTypeSimple } = require('oscquery');
+const { OSCQueryServer, OSCQAccess, OSCTypeSimple } = require('./lib/OSCQueryServer');
 const osc = require('node-osc');
+const Bonjour = require('bonjour-service');
 class VRChatOSCQuery {
     constructor(appName = "VRChat-OSC-JS") {
         this.appName = appName;
@@ -18,7 +19,26 @@ class VRChatOSCQuery {
         });
         // Initialize OSC Server for receiving data
         this.oscServer = null;
+        // Initialize Bonjour for mDNS discovery trigger
+        this.bonjour = new Bonjour.Bonjour();
         console.log(`[${this.appName}] Initializing with OSC Port: ${this.oscPort}, HTTP Port: ${this.httpPort}`);
+    }
+    triggerMDNSDiscovery() {
+        console.log(`[${this.appName}] Triggering mDNS discovery to activate VRChat awareness...`);
+        // Perform a brief scan for OSCQuery services - this "wakes up" the mDNS network
+        // and makes VRChat aware of our presence
+        this.bonjour.find({ type: 'oscjson' }, (service) => {
+            console.log(`[${this.appName}] Found OSCQuery service during discovery trigger: ${service.name}`);
+        });
+        // Stop the discovery after a short time to avoid unnecessary network traffic
+        setTimeout(() => {
+            try {
+                this.bonjour.unpublishAll();
+                console.log(`[${this.appName}] mDNS discovery trigger completed`);
+            } catch (error) {
+                // Ignore errors during cleanup
+            }
+        }, 1000);
     }
     getRandomPort(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -29,7 +49,6 @@ class VRChatOSCQuery {
         });
         this.oscServer.on('message', (msg) => {
             const [address, ...values] = msg;
-            
             // Check if we should process this message based on subscriptions
             if (this.shouldProcessMessage(address)) {
                 this.handleOSCMessage(address, values);
@@ -106,7 +125,7 @@ class VRChatOSCQuery {
             console.log(`[${this.appName}] No more subscriptions, reverting to subscribe all`);
         }
     }
-    subscribeToAll() {
+    subscribeToAllPaths() {
         this.subscribeToAll = true;
         this.subscribedPaths.clear();
         console.log(`[${this.appName}] Now subscribing to all paths`);
@@ -136,7 +155,8 @@ class VRChatOSCQuery {
     }
     async start() {
         try {
-            console.log(`[${this.appName}] Starting VRChat OSC Query Server...`);
+            console.log(`[${this.appName}] Starting VRChat OSC Query Server (Pure JavaScript)...`);
+            
             // Setup OSC Query endpoints
             this.setupOSCQueryEndpoints();
             // Start OSC Query Server (for discovery)
@@ -148,6 +168,10 @@ class VRChatOSCQuery {
             console.log(`[${this.appName}] OSC Query HTTP Server: http://localhost:${this.httpPort}`);
             console.log(`[${this.appName}] OSC UDP Server: localhost:${this.oscPort}`);
             console.log(`[${this.appName}] Subscribe to all paths: ${this.subscribeToAll}`);
+            // Trigger mDNS discovery after 2 seconds to activate VRChat awareness
+            setTimeout(() => {
+                this.triggerMDNSDiscovery();
+            }, 2000);
         } catch (error) {
             console.error(`[${this.appName}] Failed to start server:`, error);
         }
@@ -158,6 +182,14 @@ class VRChatOSCQuery {
             if (this.oscServer) {
                 this.oscServer.close();
             }
+            // Clean up bonjour instance
+            if (this.bonjour) {
+                try {
+                    this.bonjour.unpublishAll();
+                } catch (error) {
+                    // Ignore cleanup errors
+                }
+            }
             await this.oscQueryServer.stop();
             console.log(`[${this.appName}] Servers stopped.`);
         } catch (error) {
@@ -166,7 +198,7 @@ class VRChatOSCQuery {
     }
 }
 // Create and start the server
-const vrchatOSC = new VRChatOSCQuery("OSC-Query-JS-Demo-1");
+const vrchatOSC = new VRChatOSCQuery("ComfyChloe-VRChat-OSC-JS");
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
     console.log('\nReceived SIGINT, shutting down gracefully...');

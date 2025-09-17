@@ -10,8 +10,9 @@
   "author": "ComfyChloe",
   "license": "MIT",
   "dependencies": {
-    "oscquery": "^1.1.1",
-    "node-osc": "^8.0.6"
+    "bonjour-service": "^1.0.14",
+    "node-osc": "^8.0.6",
+    "portfinder": "^1.0.38"
   },
   "keywords": [
     "osc",
