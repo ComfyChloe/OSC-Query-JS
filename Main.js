@@ -85,7 +85,6 @@ class VRChatOSCQuery {
     }
     handleAvatarParameter(address, values) {
         const paramName = address.replace('/avatar/parameters/', '');
-        console.log(`[${this.appName}] Avatar Parameter - ${paramName}:`, values[0]);
     }
     handleChatbox(address, values) {
         console.log(`[${this.appName}] Chatbox Message:`, values[0]);
@@ -149,7 +148,6 @@ class VRChatOSCQuery {
             console.log(`[${this.appName}] OSC Query HTTP Server: http://localhost:${this.httpPort}`);
             console.log(`[${this.appName}] OSC UDP Server: localhost:${this.oscPort}`);
             console.log(`[${this.appName}] Subscribe to all paths: ${this.subscribeToAll}`);
-            
         } catch (error) {
             console.error(`[${this.appName}] Failed to start server:`, error);
         }
@@ -168,7 +166,7 @@ class VRChatOSCQuery {
     }
 }
 // Create and start the server
-const vrchatOSC = new VRChatOSCQuery("ComfyChloe-VRChat-OSC");
+const vrchatOSC = new VRChatOSCQuery("OSC-Query-JS-Demo-1");
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
     console.log('\nReceived SIGINT, shutting down gracefully...');
@@ -180,11 +178,5 @@ process.on('SIGTERM', async () => {
     await vrchatOSC.stop();
     process.exit(0);
 });
-// Start the server
 vrchatOSC.start().catch(console.error);
-// Example usage of subscription methods (uncomment to test specific subscriptions)
-// setTimeout(() => {
-//     vrchatOSC.subscribe('/avatar/parameters/VRCFaceTracking');
-//     vrchatOSC.subscribe('/avatar/(!?vrcft)'); // Subscribe to all avatar except those containing 'vrcft'
-// }, 2000);
 module.exports = VRChatOSCQuery;
