@@ -1,14 +1,13 @@
 {
   "name": "comfychloe",
-  "version": "0.1.0",
-  "description": "A JavaScript project for OSC Query implementation",
+  "version": "1.0.0",
+  "description": "A JavaScript implementation of OSC Query (Focused for VRChat)",
   "main": "Main.js",
   "scripts": {
-    "start": "node Main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node Main.js"
   },
   "author": "ComfyChloe",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "bonjour-service": "^1.0.14",
     "node-osc": "^8.0.6",
