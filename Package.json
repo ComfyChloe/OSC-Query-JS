@@ -1,25 +1,34 @@
 {
-  "name": "comfychloe",
+  "name": "oscquery-js",
   "version": "1.0.0",
   "description": "A JavaScript implementation of OSC Query (Focused for VRChat)",
-  "main": "Main.js",
-  "scripts": {
-    "start": "node Main.js"
-  },
-  "author": "ComfyChloe",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "bonjour-service": "^1.0.14",
-    "node-osc": "^8.0.6",
-    "portfinder": "^1.0.38"
-  },
   "keywords": [
     "osc",
     "oscquery",
     "javascript"
   ],
+  "homepage": "https://github.com/ComfyChloe/OSC-Query-JS#readme",
+  "bugs": {
+    "url": "https://github.com/ComfyChloe/OSC-Query-JS/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ComfyChloe/OSC-Query-JS"
-  }
+    "url": "git+https://github.com/ComfyChloe/OSC-Query-JS.git"
+  },
+  "license": "Apache-2.0",
+  "author": "ComfyChloe",
+  "type": "commonjs",
+  "main": "Main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node Main.js"
+  },
+  "dependencies": {
+    "bonjour-service": "^1.0.14",
+    "node-osc": "^8.0.6",
+    "portfinder": "^1.0.38"
+  },
+  "devDependencies": {}
 }
