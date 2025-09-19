@@ -209,69 +209,6 @@ curl http://localhost:8080/avatar/parameters/VRCEmote?VALUE
 curl http://localhost:8080/avatar/parameters/VRCEmote?TYPE
 ```
 
-## 🔌 Integration Examples
-
-### OBS Studio Integration
-
-```javascript
-const VRChatOSCQuery = require('./Main.js');
-const OBSWebSocket = require('obs-websocket-js');
-
-const vrchat = new VRChatOSCQuery("VRChat-OBS-Bridge");
-const obs = new OBSWebSocket();
-
-// Connect to OBS
-obs.connect('ws://localhost:4444');
-
-// Switch OBS scenes based on VRChat emotes
-vrchat.handleAvatarParameter = function(address, values) {
-    const paramName = address.replace('/avatar/parameters/', '');
-    
-    if (paramName === 'VRCEmote') {
-        const emoteId = values[0];
-        switch (emoteId) {
-            case 1: obs.send('SetCurrentScene', { 'scene-name': 'Dance Scene' }); break;
-            case 2: obs.send('SetCurrentScene', { 'scene-name': 'Gaming Scene' }); break;
-            // Add more emote mappings
-        }
-    }
-};
-
-vrchat.start();
-```
-
-### Web Dashboard Integration
-
-```javascript
-const VRChatOSCQuery = require('./Main.js');
-const express = require('express');
-const { Server } = require('socket.io');
-
-const vrchat = new VRChatOSCQuery("VRChat-Web-Dashboard");
-const webApp = express();
-const webServer = require('http').createServer(webApp);
-const io = new Server(webServer);
-
-// Serve web dashboard
-webApp.use(express.static('public'));
-
-// Forward VRChat data to web clients
-vrchat.handleAvatarParameter = function(address, values) {
-    const paramName = address.replace('/avatar/parameters/', '');
-    io.emit('avatarParameter', { name: paramName, value: values[0] });
-};
-
-vrchat.handleChatbox = function(address, values) {
-    io.emit('chatMessage', { text: values[0], typing: values[1] });
-};
-
-// Start both servers
-vrchat.start();
-webServer.listen(3000, () => {
-    console.log('Web dashboard: http://localhost:3000');
-});
-```
-
 ## 📚 API Reference
 
 ### VRChatOSCQuery Class
