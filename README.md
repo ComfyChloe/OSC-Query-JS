@@ -259,3 +259,6 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 - VRChat team for OSC implementation and documentation
 - OSC Query specification contributors
 - Node.js OSC community libraries
+
+
+A javascript variant of typescript osc-query from jangxx (https://github.com/jangxx/node-oscquery)
